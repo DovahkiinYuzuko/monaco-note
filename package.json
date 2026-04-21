@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "node --stack-size=10000 ./node_modules/vite/bin/vite.js build",
     "preview": "vite preview",
     "tauri": "tauri"
   },
@@ -34,6 +34,6 @@
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
     "typescript": "~5.8.3",
-    "vite": "^7.0.4"
+    "vite": "^6.2.0"
   }
 }

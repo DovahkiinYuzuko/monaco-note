@@ -18,7 +18,11 @@ export default defineConfig(async () => ({
   envPrefix: ['VITE_', 'TAURI_'],
   build: {
     target: process.env.TAURI_ENV === 'windows' ? 'chrome105' : 'safari13',
-    minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,
+    minify: false,
+    cssMinify: false,
     sourcemap: !!process.env.TAURI_DEBUG,
+  },
+  optimizeDeps: {
+    include: ['@monaco-editor/react', 'lucide-react', 'markdown-it', 'dompurify'],
   },
 }));

@@ -1,6 +1,17 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { invoke } from '@tauri-apps/api/core';
-import { X, Plus, Trash2, FileJson, RefreshCw, Settings as SettingsIcon, Type, Scissors, MoreHorizontal, Globe, Check } from 'lucide-react';
+import X from "lucide-react/dist/esm/icons/x";
+import Plus from "lucide-react/dist/esm/icons/plus";
+import Trash2 from "lucide-react/dist/esm/icons/trash-2";
+import FileJson from "lucide-react/dist/esm/icons/file-json";
+import RefreshCw from "lucide-react/dist/esm/icons/refresh-cw";
+import SettingsIcon from "lucide-react/dist/esm/icons/settings";
+import Type from "lucide-react/dist/esm/icons/type";
+import Scissors from "lucide-react/dist/esm/icons/scissors";
+import MoreHorizontal from "lucide-react/dist/esm/icons/more-horizontal";
+import Globe from "lucide-react/dist/esm/icons/globe";
+import Check from "lucide-react/dist/esm/icons/check";
+
 import { AppConfig } from '../hooks/useConfig';
 
 interface SettingsProps {

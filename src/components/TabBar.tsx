@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { X, Plus, FileText } from 'lucide-react';
+import X from "lucide-react/dist/esm/icons/x";
+import Plus from "lucide-react/dist/esm/icons/plus";
+import FileText from "lucide-react/dist/esm/icons/file-text";
+
 import { Tab } from '../hooks/useTabs';
 
 interface TabBarProps {

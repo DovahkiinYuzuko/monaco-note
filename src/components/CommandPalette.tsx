@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Command } from '../hooks/useCommandPalette';
-import { Search } from 'lucide-react';
+import Search from "lucide-react/dist/esm/icons/search";
 
 interface Props {
   isOpen: boolean;
