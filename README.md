@@ -1,7 +1,7 @@
 # モナコノート / Monaco Note
 
 <p align="center">
-  <img src="../app-icon.png" width="128" height="128" alt="Monaco Note Icon">
+  <img src="app-icon.png" width="128" height="128" alt="Monaco Note Icon">
 </p>
 
 [日本語](#日本語) | [English](#english)
