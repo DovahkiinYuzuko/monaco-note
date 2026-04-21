@@ -1,0 +1,70 @@
+:root {
+  --primary: #0066ff;
+  --primary-hover: #0052cc;
+  --transition-speed: 0.15s;
+}
+
+/* ダークモード */
+[data-theme="vs-dark"] {
+  --bg-main: #1e1e1e;
+  --bg-sidebar: #252526;
+  --bg-actionbar: #2d2d2d;
+  --bg-tab-active: #1e1e1e;
+  --bg-tab-inactive: #2d2d2d;
+  --bg-hover: #2a2d2e;
+  --bg-input: #3c3c3c;
+  
+  --text-main: #d4d4d4;
+  --text-muted: #858585;
+  --text-tab: #969696;
+  --text-tab-active: #ffffff;
+  
+  --border-main: #333333;
+  --border-focus: #0066ff;
+}
+
+/* 目に優しいライトモード (文字をくっきりさせたよ！) */
+[data-theme="light"] {
+  --bg-main: #faf9f6;      /* 背景はそのまま */
+  --bg-sidebar: #f2f1ee;
+  --bg-actionbar: #e8e7e3;
+  --bg-tab-active: #ffffff;
+  --bg-tab-inactive: #e8e8e8;
+  --bg-hover: #e0deda;
+  --bg-input: #ffffff;
+  
+  --text-main: #1a1a1c;    /* 【修正】文字を濃くして読みやすくしたよ！ */
+  --text-muted: #5a5a5c;
+  --text-tab: #616161;
+  --text-tab-active: #1a1a1c;
+  
+  --border-main: #d1d1d1;
+  --border-focus: #0066ff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: -apple-system, "BlinkMacSystemFont", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+#root { height: 100vh; }
+.container { height: 100%; width: 100%; display: flex; overflow: hidden; }
+
+[data-theme="vs-dark"] ::-webkit-scrollbar { width: 10px; height: 10px; }
+[data-theme="vs-dark"] ::-webkit-scrollbar-track { background: var(--bg-main); }
+[data-theme="vs-dark"] ::-webkit-scrollbar-thumb { background: #333; }
+[data-theme="vs-dark"] ::-webkit-scrollbar-thumb:hover { background: #444; }
+
+[data-theme="light"] ::-webkit-scrollbar { width: 10px; height: 10px; }
+[data-theme="light"] ::-webkit-scrollbar-track { background: var(--bg-main); }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: #ccc; }
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: #bbb; }

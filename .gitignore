@@ -1,0 +1,44 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# --- Internal Documentation (STRICTLY PRIVATE) ---
+仕様書.md
+変数関数仕様書.md
+進捗引き継ぎ.md
+conductor/
+docs/
+.superpowers/
+.gemini_security/
+VSCode公式リファレンスEditorColors.txt
+だいじなもの/
+
+# --- Monaco Note Specific ---
+.history/
+src-tauri/target/
+src-tauri/gen/schemas/
+src-tauri/Cargo.lock
+
+# OS files
+Thumbs.db
+desktop.ini
