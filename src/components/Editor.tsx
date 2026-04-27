@@ -98,7 +98,7 @@ const MonacoEditor: React.FC<MonacoEditorProps> = ({
           fontSize,
           fontFamily,
           minimap: { enabled: false },
-          automaticLayout: true, // 【復活】やっぱりこれが一番安定するよ！
+          automaticLayout: true,
           lineHeight: 1.7 * fontSize,
           letterSpacing: 0.04 * fontSize,
           wordWrap: 'on',
@@ -143,7 +143,6 @@ const MonacoEditor: React.FC<MonacoEditorProps> = ({
           
           acceptSuggestionOnEnter: 'off',
           tabCompletion: 'on',
-          // 【重要】fixedOverflowWidgets は IME (日本語入力) を破壊するので OFF に！
           fixedOverflowWidgets: false, 
         }}
       />
@@ -161,7 +160,7 @@ const MonacoEditor: React.FC<MonacoEditorProps> = ({
         /* 検索ウィジェット自体の Z-index を確保 */
         .monaco-editor .find-widget {
           z-index: 2000 !important;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+          box-shadow: var(--shadow-subtle) !important;
           border: 1px solid var(--border-main) !important;
           pointer-events: all !important;
         }

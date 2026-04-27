@@ -4,7 +4,7 @@ import anchor from 'markdown-it-anchor';
 import { openUrl } from '@tauri-apps/plugin-opener'; // 外部リンク用
 import hljs from 'highlight.js';
 import DOMPurify from 'dompurify'; // 【追加】サニタイズ用
-import 'github-markdown-css/github-markdown.css'; // ダーク/ライト両対応に変更
+import 'github-markdown-css/github-markdown.css'; 
 import 'highlight.js/styles/github-dark.css';
 
 // markdown-it の初期化
@@ -159,10 +159,6 @@ const Preview: React.FC<PreviewProps> = ({
           const decodedId = decodeURIComponent(rawId);
           
           try {
-            // IDまたはname属性で要素を検索
-            // 1. 生のID（エンコードされたまま）
-            // 2. デコードされたID
-            // 3. name属性（エンコード）
             const targetEl = document.getElementById(rawId) || 
                              document.getElementById(decodedId) ||
                              containerRef.current?.querySelector(`[id="${CSS.escape(rawId)}"]`) ||
@@ -172,7 +168,6 @@ const Preview: React.FC<PreviewProps> = ({
             if (targetEl) {
               isAutoScrolling.current = true;
               targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              // アニメーションが終わる頃にロックを解除
               setTimeout(() => { isAutoScrolling.current = false; }, 800);
             }
           } catch (err) {
@@ -192,7 +187,7 @@ const Preview: React.FC<PreviewProps> = ({
   return (
     <div className="preview-container" data-theme={theme} style={{
       height: '100%', width: '100%', overflow: 'hidden',
-      backgroundColor: theme === 'vs-dark' ? '#1e1e1e' : '#faf9f6'
+      backgroundColor: 'var(--bg-main)'
     }}>
       <style>{`
         .markdown-body {
@@ -202,35 +197,61 @@ const Preview: React.FC<PreviewProps> = ({
           line-height: 1.7 !important;
           letter-spacing: 0.04em !important;
           color-scheme: ${theme === 'vs-dark' ? 'dark' : 'light'} !important;
-          
-          /* GitHub CSS 変数の強制同期 */
-          --color-fg-default: var(--text-main) !important;
-          --color-canvas-default: transparent !important;
-          --color-canvas-subtle: rgba(128,128,128,0.1) !important;
-          --color-border-default: var(--border-main) !important;
         }
 
-        /* 【重要】ライトモード時の強力な上書き設定 */
+        /* GitHub CSS 変数のテーマ別同期 */
+        .preview-container[data-theme="vs-dark"] .markdown-body {
+          --color-fg-default: #d4d4d4 !important;
+          --color-canvas-default: transparent !important;
+          --color-canvas-subtle: #252526 !important;
+          --color-border-default: #333333 !important;
+          --color-border-muted: #333333 !important;
+          --color-neutral-muted: rgba(110,118,129,0.4) !important;
+          --color-accent-fg: #58a6ff !important;
+          --color-accent-emphasis: #1f6feb !important;
+        }
+
+        .preview-container[data-theme="light"] .markdown-body {
+          --color-fg-default: #1a1a1c !important;
+          --color-canvas-default: transparent !important;
+          --color-canvas-subtle: #f2f1ee !important;
+          --color-border-default: #d1d1d1 !important;
+          --color-border-muted: #e1e1e1 !important;
+          --color-neutral-muted: rgba(175,184,193,0.2) !important;
+          --color-accent-fg: #0969da !important;
+          --color-accent-emphasis: #0969da !important;
+        }
+
+        /* テーブルの背景色修正 */
+        .markdown-body table tr {
+          background-color: var(--color-canvas-default) !important;
+        }
+        .markdown-body table tr:nth-child(2n) {
+          background-color: var(--color-canvas-subtle) !important;
+        }
+        .markdown-body table th {
+          background-color: var(--color-canvas-subtle) !important;
+        }
+
+        /* 文字色と枠線の強制上書き */
         .preview-container[data-theme="light"] .markdown-body,
         .preview-container[data-theme="light"] .markdown-body *:not(pre, code, .hljs, .hljs *) {
           color: var(--text-main) !important;
-        }
-        
-        .preview-container[data-theme="light"] .markdown-body border-color {
           border-color: var(--border-main) !important;
         }
-
+        
         .markdown-body strong, .markdown-body b { font-weight: bold !important; color: inherit !important; }
         .markdown-body em, .markdown-body i { font-style: italic !important; display: inline !important; }
         .markdown-body u { text-decoration: underline !important; }
 
+        /* コードブロックの外枠 */
         .code-block-wrapper {
           position: relative;
           margin: 2em 0;
           border-radius: 8px;
-          background-color: #0d1117 !important;
           border: 1px solid var(--border-main);
           overflow: visible;
+          background-color: ${theme === 'vs-dark' ? '#0d1117' : '#f6f8fa'} !important;
         }
 
         .code-block-wrapper::before {
@@ -253,15 +274,15 @@ const Preview: React.FC<PreviewProps> = ({
           right: 10px;
           padding: 4px 12px;
           font-size: 11px;
-          color: #8b949e;
-          background: #21262d;
-          border: 1px solid rgba(240,246,252,0.1);
+          color: var(--text-muted);
+          background: ${theme === 'vs-dark' ? '#21262d' : '#fff'};
+          border: 1px solid var(--border-main);
           border-radius: 6px;
           cursor: pointer;
           z-index: 21;
           transition: all 0.2s;
         }
-        .copy-btn:hover { color: #c9d1d9; background: #30363d; border-color: #8b949e; }   
+        .copy-btn:hover { color: var(--text-main); background: var(--bg-hover); border-color: var(--primary); }   
         .copy-btn.success { color: #3fb950; border-color: #3fb950; }
 
         .markdown-body pre {
@@ -272,14 +293,34 @@ const Preview: React.FC<PreviewProps> = ({
           overflow-x: auto;
         }
 
+        /* highlight.js のライトモード用簡易上書き */
+        .preview-container[data-theme="light"] .hljs {
+          color: #24292e !important;
+          background: transparent !important;
+        }
+        .preview-container[data-theme="light"] .hljs-keyword,
+        .preview-container[data-theme="light"] .hljs-selector-tag { color: #d73a49 !important; }
+        .preview-container[data-theme="light"] .hljs-string,
+        .preview-container[data-theme="light"] .hljs-doctag { color: #032f62 !important; }
+        .preview-container[data-theme="light"] .hljs-title,
+        .preview-container[data-theme="light"] .hljs-section,
+        .preview-container[data-theme="light"] .hljs-selector-id { color: #6f42c1 !important; }
+        .preview-container[data-theme="light"] .hljs-variable,
+        .preview-container[data-theme="light"] .hljs-template-variable { color: #e36209 !important; }
+        .preview-container[data-theme="light"] .hljs-comment { color: #6a737d !important; }
+        .preview-container[data-theme="light"] .hljs-number { color: #005cc5 !important; }
+        .preview-container[data-theme="light"] .hljs-tag,
+        .preview-container[data-theme="light"] .hljs-name { color: #22863a !important; }
+
         .markdown-body pre code {
-          color: #e6edf3 !important;
+          color: ${theme === 'vs-dark' ? '#e6edf3' : '#24292e'} !important;
           background-color: transparent !important;
           padding: 0 !important;
           font-family: ui-monospace, SFMono-Regular, Consolas, monospace !important;      
         }
 
-        .markdown-body a:hover { text-decoration: underline !important; color: var(--primary) !important; }
+        .markdown-body a { color: var(--primary) !important; text-decoration: none; }
+        .markdown-body a:hover { text-decoration: underline !important; }
       `}</style>
       <div
         ref={containerRef}
