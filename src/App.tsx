@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { invoke } from '@tauri-apps/api/core';
 import { open, save } from '@tauri-apps/plugin-dialog';
+import { listen } from '@tauri-apps/api/event';
 import "./App.css";
 import MonacoEditor from "./components/Editor";
 import TabBar from "./components/TabBar";
@@ -170,6 +171,19 @@ function App() {
     window.addEventListener('keydown', handleKeyDown, { capture: true });
     return () => window.removeEventListener('keydown', handleKeyDown, { capture: true });
   }, [togglePalette, addTab, handleOpenFile, handleSave, config?.default_encoding]);
+
+  // 外部からのファイルオープン要求を処理
+  useEffect(() => {
+    const unlisten = listen<string>("open-file", (event) => {
+      const filePath = event.payload;
+      if (filePath) {
+        openFile(filePath);
+      }
+    });
+    return () => {
+      unlisten.then(f => f());
+    };
+  }, [openFile]);
 
   // 6. 自動保存 Hook
   useAutoSave(activeTab || tabs[0] || { id: 'initial', path: null, isModified: false, content: '', cacheId: 'initial' }, saveFile);
@@ -399,7 +413,6 @@ function App() {
         language={currentTab.language || 'plaintext'} 
         encoding={currentTab.encoding || 'UTF-8'} 
         theme={config.theme} 
-        fontFamily={config.editor_font_family}
         onEncodingClick={() => togglePalette('Encoding: ')}
         onLanguageClick={() => togglePalette('Language: ')}
       />

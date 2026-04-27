@@ -99,6 +99,7 @@ const TabBar: React.FC<TabBarProps> = ({ tabs, activeTabId, onTabClick, onTabClo
               onTabClose(tab.id);
             }}
           />
+
         </div>
       ))}
       <style>{`

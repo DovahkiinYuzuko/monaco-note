@@ -5,14 +5,12 @@ interface StatusBarProps {
   language: string;
   encoding: string;
   theme: string;
-  fontFamily: string;
   onLanguageClick?: () => void;
   onEncodingClick?: () => void;
 }
 
-const StatusBar: React.FC<StatusBarProps> = ({ charCount, language, encoding, theme, fontFamily, onLanguageClick, onEncodingClick }) => {
-  const isDark = theme === 'vs-dark';
-  const bgColor = isDark ? '#007acc' : 'var(--primary)';
+const StatusBar: React.FC<StatusBarProps> = ({ charCount, language, encoding, theme, onLanguageClick, onEncodingClick }) => {
+  const bgColor = 'var(--primary)';
 
   const itemStyle: React.CSSProperties = {
     cursor: 'pointer',

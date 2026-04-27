@@ -152,7 +152,7 @@ const CommandPalette: React.FC<Props> = ({ isOpen, initialSearch = '', commands,
             ))
           ) : (
             <div style={{ padding: '16px', textAlign: 'center', fontSize: '14px', opacity: 0.5 }}>
-              コマンドが見つからないよ...😭
+              該当するコマンドが見つかりません
             </div>
           )}
         </div>

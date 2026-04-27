@@ -213,10 +213,10 @@ const Preview: React.FC<PreviewProps> = ({
 
         .preview-container[data-theme="light"] .markdown-body {
           --color-fg-default: #1a1a1c !important;
-          --color-canvas-default: transparent !important;
-          --color-canvas-subtle: #f2f1ee !important;
-          --color-border-default: #d1d1d1 !important;
-          --color-border-muted: #e1e1e1 !important;
+          --color-canvas-default: #ffffff !important;
+          --color-canvas-subtle: #f6f8fa !important;
+          --color-border-default: #d0d7de !important;
+          --color-border-muted: #d0d7de !important;
           --color-neutral-muted: rgba(175,184,193,0.2) !important;
           --color-accent-fg: #0969da !important;
           --color-accent-emphasis: #0969da !important;

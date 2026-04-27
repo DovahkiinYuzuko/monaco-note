@@ -164,6 +164,7 @@ const MonacoEditor: React.FC<MonacoEditorProps> = ({
           border: 1px solid var(--border-main) !important;
           pointer-events: all !important;
         }
+
         .monaco-editor .find-widget .button {
           pointer-events: all !important;
         }
