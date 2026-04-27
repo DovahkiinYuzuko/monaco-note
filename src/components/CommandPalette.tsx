@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Command } from '../hooks/useCommandPalette';
-import Search from "lucide-react/dist/esm/icons/search";
+import { Search } from "lucide-react";
 
 interface Props {
   isOpen: boolean;
@@ -11,7 +11,7 @@ interface Props {
   theme: 'vs-dark' | 'light';
 }
 
-const CommandPalette: React.FC<Props> = ({ isOpen, initialSearch = '', commands, onExecute, onClose, theme }) => {
+const CommandPalette: React.FC<Props> = ({ isOpen, initialSearch = '', commands, onExecute, onClose }) => {
   const [search, setSearch] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -59,8 +59,6 @@ const CommandPalette: React.FC<Props> = ({ isOpen, initialSearch = '', commands,
 
   if (!isOpen) return null;
 
-  const isDark = theme === 'vs-dark';
-
   return (
     <div 
       className="command-palette-overlay"
@@ -83,19 +81,19 @@ const CommandPalette: React.FC<Props> = ({ isOpen, initialSearch = '', commands,
         style={{
           width: '600px',
           maxHeight: '400px',
-          backgroundColor: isDark ? '#1e1e1e' : '#ffffff',
-          color: isDark ? '#cccccc' : '#333333',
+          backgroundColor: 'var(--bg-main)',
+          color: 'var(--text-main)',
           borderRadius: '8px',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+          boxShadow: 'var(--shadow-main)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          border: `1px solid ${isDark ? '#333333' : '#dddddd'}`
+          border: '1px solid var(--border-main)'
         }}
         onClick={e => e.stopPropagation()}
       >
-        <div style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', borderBottom: `1px solid ${isDark ? '#333333' : '#eeeeee'}` }}>
-          <Search size={18} style={{ marginRight: '12px', color: isDark ? '#888' : '#999' }} />
+        <div style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid var(--border-main)' }}>
+          <Search size={18} style={{ marginRight: '12px', color: 'var(--text-muted)' }} />
           <input
             ref={inputRef}
             type="text"
@@ -129,8 +127,8 @@ const CommandPalette: React.FC<Props> = ({ isOpen, initialSearch = '', commands,
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  backgroundColor: index === selectedIndex ? (isDark ? '#0066ff' : '#e6f0ff') : 'transparent',
-                  color: index === selectedIndex ? (isDark ? '#ffffff' : '#0066ff') : 'inherit'
+                  backgroundColor: index === selectedIndex ? 'var(--bg-hover)' : 'transparent',
+                  color: index === selectedIndex ? 'var(--primary)' : 'inherit'
                 }}
                 onMouseEnter={() => setSelectedIndex(index)}
               >
@@ -142,9 +140,10 @@ const CommandPalette: React.FC<Props> = ({ isOpen, initialSearch = '', commands,
                   <span style={{ 
                     fontSize: '12px', 
                     opacity: 0.6, 
-                    backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+                    backgroundColor: 'var(--bg-actionbar)',
                     padding: '2px 6px',
-                    borderRadius: '4px'
+                    borderRadius: '4px',
+                    border: '1px solid var(--border-main)'
                   }}>
                     {cmd.shortcut}
                   </span>

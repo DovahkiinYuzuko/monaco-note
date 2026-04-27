@@ -9,19 +9,10 @@ import Settings from "./components/Settings";
 import StatusBar from "./components/StatusBar";
 import CommandPalette from "./components/CommandPalette";
 import { useConfig } from "./hooks/useConfig";
-import Eye from "lucide-react/dist/esm/icons/eye";
-import Edit3 from "lucide-react/dist/esm/icons/edit-3";
-import Columns from "lucide-react/dist/esm/icons/columns";
-import SettingsIcon from "lucide-react/dist/esm/icons/settings";
-import FilePlus from "lucide-react/dist/esm/icons/file-plus";
-import FolderOpen from "lucide-react/dist/esm/icons/folder-open";
-import Save from "lucide-react/dist/esm/icons/save";
-import Search from "lucide-react/dist/esm/icons/search";
-import Repeat from "lucide-react/dist/esm/icons/repeat";
-import Undo2 from "lucide-react/dist/esm/icons/undo-2";
-import Redo2 from "lucide-react/dist/esm/icons/redo-2";
-import LinkIcon from "lucide-react/dist/esm/icons/link";
-import Link2Off from "lucide-react/dist/esm/icons/link-2-off";
+import { 
+  Eye, Edit3, Columns, Settings as SettingsIcon, FilePlus, FolderOpen, Save, Search, 
+  Repeat, Undo2, Redo2, Link as LinkIcon, Link2Off 
+} from "lucide-react";
 
 import { useTabs, Tab } from "./hooks/useTabs";
 import { useAutoSave } from "./hooks/useAutoSave";

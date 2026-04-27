@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import X from "lucide-react/dist/esm/icons/x";
-import Plus from "lucide-react/dist/esm/icons/plus";
-import FileText from "lucide-react/dist/esm/icons/file-text";
+import { X, Plus, FileText } from "lucide-react";
 
 import { Tab } from '../hooks/useTabs';
 
@@ -96,7 +94,7 @@ const TabBar: React.FC<TabBarProps> = ({ tabs, activeTabId, onTabClick, onTabClo
             className="close-icon"
             size={14}
             style={{ marginLeft: '8px', opacity: tab.id === activeTabId ? 1 : 0, color: 'var(--text-muted)' }}
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent) => {
               e.stopPropagation();
               onTabClose(tab.id);
             }}

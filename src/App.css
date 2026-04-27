@@ -21,11 +21,14 @@
   
   --border-main: #333333;
   --border-focus: #0066ff;
+  
+  --shadow-main: 0 8px 32px rgba(0,0,0,0.5);
+  --shadow-subtle: 0 4px 12px rgba(0,0,0,0.5);
 }
 
-/* 目に優しいライトモード (文字をくっきりさせたよ！) */
+/* 目に優しいライトモード */
 [data-theme="light"] {
-  --bg-main: #faf9f6;      /* 背景はそのまま */
+  --bg-main: #faf9f6;
   --bg-sidebar: #f2f1ee;
   --bg-actionbar: #e8e7e3;
   --bg-tab-active: #ffffff;
@@ -33,13 +36,16 @@
   --bg-hover: #e0deda;
   --bg-input: #ffffff;
   
-  --text-main: #1a1a1c;    /* 【修正】文字を濃くして読みやすくしたよ！ */
+  --text-main: #1a1a1c;
   --text-muted: #5a5a5c;
   --text-tab: #616161;
   --text-tab-active: #1a1a1c;
   
   --border-main: #d1d1d1;
   --border-focus: #0066ff;
+
+  --shadow-main: 0 8px 32px rgba(0,0,0,0.15);
+  --shadow-subtle: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 body {
