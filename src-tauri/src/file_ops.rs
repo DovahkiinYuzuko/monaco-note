@@ -10,30 +10,27 @@ pub struct FileData {
     pub encoding: String,
 }
 
-// パスの安全性をチェックする内部関数
+// パスの安全性をチェックするためのユーティリティ関数
 fn is_path_safe(path: &str) -> bool {
-    let p = Path::new(path);
-    // 1. パスコンポーネントに ".." が含まれていないかチェック
+    // 1. 相対パスでの遡り ("..") をチェックして、不適切なファイルアクセスを防ぐ
     if path.contains("..") {
         return false;
     }
-    // 2. 絶対パスであることを推奨（Windowsの場合はドライブレターから始まるか）
-    // ※ メモ帳なので任意の場所を開ける必要があるが、システムディレクトリ等はOSの権限に任せる
+    // 2. 将来的には特定のディレクトリ制限などを追加可能だが、現在は自由なアクセスを許容
     true
 }
 
 #[tauri::command]
 pub fn read_text_file(path: String) -> Result<FileData, String> {
     if !is_path_safe(&path) {
-        return Err("不正なパスが指定されました".to_string());
+        return Err("安全ではないパスが指定されました。".to_string());
     }
 
     let mut file = File::open(&path).map_err(|e| e.to_string())?;
     let mut buffer = Vec::new();
     file.read_to_end(&mut buffer).map_err(|e| e.to_string())?;
 
-    // 文字コードの判別（簡易版：UTF-8かそれ以外か）
-    // 本格的には chardet とか使うけど、今回は encoding_rs の decode を試す
+    // 文字エンコーディングの判定ロジック。まずはUTF-8で試行。
     let (res, _encoding, _has_errors) = UTF_8.decode(&buffer);
     if !_has_errors {
         return Ok(FileData {
@@ -42,7 +39,7 @@ pub fn read_text_file(path: String) -> Result<FileData, String> {
         });
     }
 
-    // UTF-8 でエラーが出たら Shift-JIS を試す
+    // UTF-8でエラーが出た場合はShift-JISで試行。
     let (res, _, _has_errors) = SHIFT_JIS.decode(&buffer);
     if !_has_errors {
         return Ok(FileData {
@@ -51,7 +48,7 @@ pub fn read_text_file(path: String) -> Result<FileData, String> {
         });
     }
 
-    // それでもダメなら EUC-JP
+    // それでもダメな場合はEUC-JPとして扱う（フォールバック）。
     let (res, _, _) = EUC_JP.decode(&buffer);
     Ok(FileData {
         content: res.into_owned(),
@@ -62,11 +59,11 @@ pub fn read_text_file(path: String) -> Result<FileData, String> {
 #[tauri::command]
 pub fn write_text_file(path: String, content: String, encoding: String) -> Result<(), String> {
     if !is_path_safe(&path) {
-        return Err("不正なパスが指定されました".to_string());
+        return Err("安全ではないパスが指定されました。".to_string());
     }
 
     let mut file = File::create(&path).map_err(|e| e.to_string())?;
-    
+
     let bytes = match encoding.as_str() {
         "Shift-JIS" => {
             let (res, _, _) = SHIFT_JIS.encode(&content);
