@@ -51,3 +51,4 @@ This software uses the following open-source libraries:
 - **encoding_rs**: MIT or Apache-2.0 License
 - **tauri-plugin-dialog**: MIT or Apache-2.0 License
 - **tauri-plugin-shell**: MIT or Apache-2.0 License
+- **fontdb**: MIT License
