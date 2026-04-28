@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 use std::fs;
-use std::path::PathBuf;
 use serde::{Deserialize, Serialize};
 use tauri::Manager;
 
@@ -49,30 +48,13 @@ impl Default for AppConfig {
 
 // フォントリストを実際にスキャンする内部関数
 fn scan_os_fonts() -> Vec<String> {
-    let mut fonts = Vec::new();
-    let font_dir = PathBuf::from("C:\\Windows\\Fonts");
-    
-    fn scan_dir(dir: PathBuf, fonts: &mut Vec<String>) {
-        if let Ok(entries) = fs::read_dir(dir) {
-            for entry in entries.flatten() {
-                let path = entry.path();
-                if path.is_dir() {
-                    scan_dir(path, fonts);
-                } else if let Some(ext) = path.extension() {
-                    let ext_str = ext.to_string_lossy().to_lowercase();
-                    if ext_str == "ttf" || ext_str == "otf" || ext_str == "ttc" {
-                        if let Some(name) = path.file_stem() {
-                            let clean_name = name.to_string_lossy().to_string();
-                            let family_name = clean_name.split('-').next().unwrap_or(&clean_name);
-                            fonts.push(family_name.to_string());
-                        }
-                    }
-                }
-            }
-        }
-    }
+    let mut db = fontdb::Database::new();
+    db.load_system_fonts();
 
-    scan_dir(font_dir, &mut fonts);
+    let mut fonts: Vec<String> = db.faces()
+        .filter_map(|face| face.families.first().map(|(name, _)| name.clone()))
+        .collect();
+
     fonts.sort_by(|a, b| a.to_lowercase().cmp(&b.to_lowercase()));
     fonts.dedup();
     fonts
