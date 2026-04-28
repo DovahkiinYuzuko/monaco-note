@@ -51,9 +51,12 @@ fn scan_os_fonts() -> Vec<String> {
     let mut db = fontdb::Database::new();
     db.load_system_fonts();
 
-    let mut fonts: Vec<String> = db.faces()
-        .filter_map(|face| face.families.first().map(|(name, _)| name.clone()))
-        .collect();
+    let mut fonts = Vec::new();
+    for face in db.faces() {
+        for (name, _) in &face.families {
+            fonts.push(name.clone());
+        }
+    }
 
     fonts.sort_by(|a, b| a.to_lowercase().cmp(&b.to_lowercase()));
     fonts.dedup();
