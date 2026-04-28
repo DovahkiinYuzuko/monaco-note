@@ -193,7 +193,7 @@ const Preview: React.FC<PreviewProps> = ({
         .markdown-body {
           color: var(--text-main) !important;
           background-color: transparent !important;
-          font-family: ${fontFamily}, system-ui, sans-serif !important;
+          font-family: "${fontFamily}", system-ui, sans-serif !important;
           line-height: 1.7 !important;
           letter-spacing: 0.04em !important;
           color-scheme: ${theme === 'vs-dark' ? 'dark' : 'light'} !important;
