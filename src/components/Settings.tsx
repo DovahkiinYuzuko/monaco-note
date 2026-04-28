@@ -31,21 +31,37 @@ const Settings: React.FC<SettingsProps> = ({ config, onSave, onClose, onOpenJson
   useEffect(() => {
     const initFonts = async () => {
       try {
+        // まずはキャッシュから読み込む
         const storedFonts = localStorage.getItem('monaco_note_font_cache');
         let initialFonts = ['system-ui'];
         if (storedFonts) {
-          initialFonts = Array.from(new Set([...initialFonts, ...JSON.parse(storedFonts)]));
+          try {
+            const parsed = JSON.parse(storedFonts);
+            if (Array.isArray(parsed)) {
+              initialFonts = Array.from(new Set([...initialFonts, ...parsed]));
+            }
+          } catch (e) {
+            console.warn("Invalid font cache", e);
+          }
         }
 
+        // バックエンドから最新のリスト（キャッシュ済み）を取得
         const cachedFonts: string[] = await invoke('get_os_fonts');
-        const mergedFonts = Array.from(new Set([...initialFonts, ...cachedFonts, config.editor_font_family, config.preview_font_family])).sort();
+        const mergedFonts = Array.from(new Set([
+          ...initialFonts, 
+          ...cachedFonts, 
+          config.editor_font_family, 
+          config.preview_font_family
+        ])).sort();
+        
         setFonts(mergedFonts);
         
-        if (mergedFonts.length <= 10) {
+        // フォントが極端に少ない場合は自動リフレッシュ
+        if (mergedFonts.length <= 5) {
           handleRefreshFonts(true);
         }
       } catch (e) {
-        console.error("Failed to load cached fonts", e);
+        console.error("Failed to load fonts during init", e);
       }
     };
     initFonts();
@@ -54,20 +70,21 @@ const Settings: React.FC<SettingsProps> = ({ config, onSave, onClose, onOpenJson
   const handleRefreshFonts = useCallback(async (silent = false) => {
     if (!silent) setIsFontLoading(true);
     try {
-      if ('queryLocalFonts' in window) {
-        const localFonts = await (window as any).queryLocalFonts();
-        const fontNames = localFonts.map((f: any) => f.family);
-        const uniqueFonts = Array.from(new Set(fontNames) as Set<string>).sort();
-        localStorage.setItem('monaco_note_font_cache', JSON.stringify(uniqueFonts));
-        const finalFonts = ['system-ui', ...uniqueFonts];
-        setFonts(prev => Array.from(new Set([...prev, ...finalFonts])).sort());
-        await invoke('refresh_os_fonts').catch(() => {});
-      } else {
-        const freshFonts: string[] = await invoke('refresh_os_fonts');
-        if (freshFonts.length > 0) setFonts(prev => Array.from(new Set([...prev, ...freshFonts])).sort());
+      // バックエンドでOSフォントをスキャン
+      const freshFonts: string[] = await invoke('refresh_os_fonts');
+      if (Array.isArray(freshFonts) && freshFonts.length > 0) {
+        const sortedFonts = freshFonts.sort();
+        // localStorageに保存して次回の起動を速くする
+        localStorage.setItem('monaco_note_font_cache', JSON.stringify(sortedFonts));
+        
+        // 既存のリストとマージ（system-uiなどは維持）
+        setFonts(prev => {
+          const merged = Array.from(new Set(['system-ui', ...prev, ...sortedFonts])).sort();
+          return merged;
+        });
       }
     } catch (e) {
-      console.warn("Font refresh failed", e);
+      console.warn("Font refresh via backend failed", e);
     } finally {
       if (!silent) setIsFontLoading(false);
     }
