@@ -96,7 +96,7 @@ const MonacoEditor: React.FC<MonacoEditorProps> = ({
         onMount={handleEditorDidMount}
         options={{
           fontSize,
-          fontFamily: `"${fontFamily}"`,
+          fontFamily: fontFamily === 'system-ui' ? fontFamily : `"${fontFamily}", monospace`,
           minimap: { enabled: false },
           automaticLayout: true,
           lineHeight: 1.7 * fontSize,
